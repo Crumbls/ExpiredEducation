@@ -15,7 +15,7 @@ An interactive web application that shows users how scientific knowledge and "fa
 ## 🚀 Features
 
 ### 📅 Personalized Timeline
-- Enter your graduation year (1901-present)
+- Enter your graduation year (1900-present)
 - See discoveries and corrections made after your school years
 - Understand how much knowledge has evolved since then
 
@@ -38,6 +38,7 @@ Our database contains **90 educational facts** covering:
 - **Homepage**: Interactive year selection
 - **Personal Timeline**: Facts that changed since your graduation
 - **Complete Timeline**: Chronological view of all discoveries
+- **Individual Fact Pages**: Detailed view with SEO optimization
 - **Admin Panel**: Content management system
 
 ## 🛠️ Technical Stack
@@ -54,10 +55,12 @@ Our database contains **90 educational facts** covering:
 - **Blade Templates** for server-side rendering
 
 ### Key Features
-- **Caching** for optimal performance
+- **Full Page Caching** for optimal performance
 - **Version Control** for fact updates
 - **Import/Export** functionality
 - **Tag System** for categorization
+- **SEO Optimization** with structured data and meta tags
+- **Sitemap Generation** for search engines
 - **Responsive Design** for all devices
 
 ## 🏗️ Installation
@@ -123,8 +126,15 @@ Each educational fact contains:
 1. **Landing Page**: User selects their graduation year
 2. **Results Page**: Personalized list of facts that changed since school
 3. **Fact Cards**: Side-by-side comparison of old vs. new knowledge
-4. **Timeline View**: Browse all discoveries chronologically
-5. **Admin Panel**: Manage and update fact database
+4. **Individual Fact Pages**: Detailed view with SEO-friendly URLs (`/facts/{id}`)
+5. **Timeline View**: Browse all discoveries chronologically
+6. **Admin Panel**: Manage and update fact database
+
+### URL Structure
+- `/` - Homepage with year selection
+- `/{year}` - Facts that changed since graduation year (1900-2099)
+- `/timeline` - Complete chronological timeline
+- `/facts/{id}` - Individual fact detail pages
 
 ## 🎓 Educational Value
 
@@ -161,6 +171,17 @@ composer run test
 ### Code Style
 ```bash
 ./vendor/bin/pint
+```
+
+### Generate Sitemap
+```bash
+php artisan app:sitemap
+```
+
+### Clear Caches
+```bash
+php artisan cache:clear
+php artisan view:clear
 ```
 
 ## 📝 Contributing

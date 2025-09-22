@@ -1,3 +1,27 @@
+@php
+
+$title = isset($title) && $title ? $title : config('app.name', 'Laravel');
+$description = isset($description) && $description ? $description : config('app.description', 'Learn how our understanding of facts have evolved from what we learned in school to what we know now.');
+$publishedDate = $publishedDate ?? null;
+$tags = $tags ?? [];
+$schema = [
+    '@context' => "https://schema.org",
+    '@type' => 'Article',
+    'headline' => $title,
+    'description' => $description,
+    'url' => request()->url(),
+    'author' => [
+        '@type' => 'Organization',
+        'name' => 'Crumbls'
+    ],
+    'publisher' => [
+        '@type' => 'Organization',
+        'name' => 'Crumbls',
+        'url' => 'https://crumbls.com'
+    ]
+];
+
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -5,22 +29,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ $title ?? config('app.name', 'Laravel') }}</title>
+    @stack('head')
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700&display=swap" rel="stylesheet" />
 
-    <!-- Google tag (gtag.js) -->
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request()->url() }}">
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HDV2BJM4NT"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'G-HDV2BJM4NT');
     </script>
+
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+        @json($schema)
+    </script>
+
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{ $title }}">
+    <meta property="og:description" content="{{ $description }}">
+    <meta property="og:url" content="{{ request()->url() }}">
+    @if($publishedDate)
+        <meta property="article:published_time" content="{{ $publishedDate }}">
+    @endif
+    @if($tags)
+        @foreach($tags as $tag)
+            <meta property="article:tag" content="{{ $tag->name }}">
+        @endforeach
+    @endif
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $title }}">
+    <meta name="twitter:description" content="{{ $description }}">
+
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -104,6 +157,14 @@
         <main>
             {{ $slot }}
         </main>
+
+
+        <div class="text-center pb-8">
+            <p class="text-sm text-muted-foreground">
+                Science is always evolving. These facts represent our current understanding
+                and may continue to be refined as we learn more.
+            </p>
+        </div>
     </div>
 
     @stack('scripts')

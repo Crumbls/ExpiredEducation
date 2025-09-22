@@ -15,7 +15,7 @@ class FullPageCacheMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $key = __METHOD__.'::'.sha1($request->fullUrl());
+        $key = __METHOD__.'::'.sha1($request->url());
 
         if (Cache::has($key)) {
             return response(Cache::get($key));

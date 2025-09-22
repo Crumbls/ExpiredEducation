@@ -16,3 +16,10 @@ Route::get('/{year}', \App\Http\Controllers\ViewYearController::class)
     ])
     ->name('year.view')
     ->where('year', '^(19|20)\d{2}$');
+
+Route::get('/facts/{fact}', \App\Http\Controllers\ViewFactController::class)
+    ->middleware([
+        //        \App\Http\Middleware\FullPageCacheMiddleware::class,
+    ])
+    ->name('fact.view')
+    ->where('fact', '^\d{1,}$');

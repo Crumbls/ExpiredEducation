@@ -16,6 +16,7 @@ class ViewYearController extends Controller
     public function __invoke(Request $request)
     {
         $year = $request->year;
+
         $records = $this->getRecords($year);
 
         return view('year.view', [

@@ -1,4 +1,7 @@
-<x-app-layout>
+<x-app-layout
+    :tags="$records->map(function($record) { return $record->tags; })->flatten()->keyBy('id')"
+>
+
 <main class="min-h-screen bg-background">
     <div class="container mx-auto px-4 py-8 md:py-16">
 
@@ -43,8 +46,9 @@
         <section class="grid gap-6 md:grid-cols-1  {{ $records->count() > 1 ? 'lg:grid-cols-2' : '' }}">
             @foreach($records as $record)
                 <article class="
+                bg-white rounded-lg shadow-lg overflow-hidden
 space-y-4
-bg-white p-4                rounded-lg border bg-card text-card-foreground shadow-sm fact-card bg-gradient-to-br from-fact-card to-secondary/20 border-gray-600 shadow-[var(--shadow-card)] hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+bg-white p-4                fact-card bg-gradient-to-br from-fact-card to-secondary/20 border-gray-600 shadow-[var(--shadow-card)] hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                     <header class="space-y-4">
                     <div class="flex items-center justify-between">
                     @if($record->tags->count())
@@ -66,7 +70,9 @@ bg-white p-4                rounded-lg border bg-card text-card-foreground shado
                         </div>
                     </div>
     <h3 class="text-xl font-bold text-foreground leading-tight">
-        {{ $record->title }}
+        <a href="{{ route('fact.view', $record) }}" rel="bookmark">
+            {{ $record->title }}
+        </a>
     </h3>
 </header>
                     <div class="space-y-4">
@@ -101,12 +107,6 @@ bg-white p-4                rounded-lg border bg-card text-card-foreground shado
         </section>
         @endif
 
-        <div class="text-center pt-8">
-            <p class="text-sm text-muted-foreground">
-                Science is always evolving. These facts represent our current understanding
-                and may continue to be refined as we learn more.
-            </p>
-        </div>
     </div>
 </main>
 </x-app-layout>
