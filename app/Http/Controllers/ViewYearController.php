@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Fact;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class ViewYearController extends Controller
@@ -29,7 +29,8 @@ class ViewYearController extends Controller
         $cacheKey = __METHOD__.'::'.$year;
 
         return Cache::remember($cacheKey, Carbon::now()->endOfYear(), function () use ($year) {
-            $records = Fact::published()
+
+            $records = $year > now()->format('Y') ? collect([]) : Fact::published()
                 ->take(10000)
                 ->with(['tags'])
                 ->whereYear('ended_at', '>=', $year)
