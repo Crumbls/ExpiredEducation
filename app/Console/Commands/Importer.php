@@ -27,29 +27,30 @@ class Importer extends Command
     public function handle()
     {
         $file = storage_path('/app/private/filament_exports/1/0000000000000001.csv');
-        if (!file_exists($file)) {
+        if (! file_exists($file)) {
             return;
         }
 
-        $lines = explode("\n",file_get_contents($file));
+        $lines = explode("\n", file_get_contents($file));
         $keys = [];
         $parsed = [];
-        foreach($lines as $lineno => $line){
+        foreach ($lines as $lineno => $line) {
 
             $data = str_getcsv($line, escape: '\\');
 
-            if (!$keys) {
+            if (! $keys) {
                 $keys = $data;
+
                 continue;
             }
 
-            if (!$data || !$data[0]) {
+            if (! $data || ! $data[0]) {
                 continue;
             }
 
             try {
                 $record = array_combine($keys, $data);
-                if (!$record['content_old']) {
+                if (! $record['content_old']) {
                     continue;
                 }
                 $parsed[] = $record;
@@ -58,26 +59,26 @@ class Importer extends Command
             }
         }
 
-//        shuffle($parsed);
+        //        shuffle($parsed);
 
         $parsed = array_chunk($parsed, 10);
 
-        foreach($parsed as $chunk) {
+        foreach ($parsed as $chunk) {
             $chunk = array_column($chunk, null, 'id');
 
             Fact::whereIn('id', array_keys($chunk))
                 ->whereNull('published_at')
                 ->update([
-                    'published_at' => now()
+                    'published_at' => now(),
                 ]);
 
             $existing = Fact::whereIn('id', array_keys($chunk))
-                ->where('content_old', '=','')
+                ->where('content_old', '=', '')
                 ->get();
-            if (!$existing->count()) {
+            if (! $existing->count()) {
                 continue;
             }
-            foreach($existing as $record) {
+            foreach ($existing as $record) {
                 $data = $chunk[$record->getKey()];
                 dump($data);
                 $record->content_old = $data['content_old'];

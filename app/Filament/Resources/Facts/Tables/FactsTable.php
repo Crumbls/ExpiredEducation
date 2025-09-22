@@ -19,12 +19,12 @@ class FactsTable
         return $table
             ->headerActions([
                 ExportAction::make()
-                    ->exporter( FactExporter::class),
+                    ->exporter(FactExporter::class),
                 ImportAction::make()
-                    ->importer( FactImporter::class)
+                    ->importer(FactImporter::class)
                     ->options([
                         'updateExisting' => true,
-                    ])
+                    ]),
             ])
             ->columns([
                 TextColumn::make('title')
@@ -56,7 +56,7 @@ class FactsTable
                 TextColumn::make('ended_at_format')
 
                     ->toggleable(isToggledHiddenByDefault: true),
-                ])
+            ])
             ->filters([
                 //
             ])

@@ -4,21 +4,18 @@ namespace App\Livewire;
 
 use Carbon\Carbon;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Form;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redirect;
 use Livewire\Component;
 use Livewire\Features\SupportRedirects\Redirector;
-
 
 class Welcome extends Component implements HasSchemas
 {
     use InteractsWithSchemas;
+
     public ?array $data = [];
 
     public function mount(): void
@@ -26,8 +23,9 @@ class Welcome extends Component implements HasSchemas
         $this->form->fill();
     }
 
-    protected function getYears() : array {
-        return Cache::remember(__METHOD__,  Carbon::now()->endOfYear(), function() {
+    protected function getYears(): array
+    {
+        return Cache::remember(__METHOD__, Carbon::now()->endOfYear(), function () {
             $now = Carbon::now();
 
             $currentYear = $now->year;
@@ -68,9 +66,9 @@ class Welcome extends Component implements HasSchemas
     {
         $year = Arr::get($this->form->getState(), 'year');
         $year = $year ?? Carbon::now()->addYears(-18)->format('Y');
+
         return redirect()->route('year.view', $year);
     }
-
 
     public function render()
     {

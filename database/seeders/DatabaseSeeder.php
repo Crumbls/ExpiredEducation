@@ -16,9 +16,9 @@ class DatabaseSeeder extends Seeder
     {
         User::firstOrCreate([
             'name' => 'Chase',
-            'email' => 'chase@crumbls.com'
+            'email' => 'chase@crumbls.com',
         ], [
-            'password' => bcrypt(md5(__LINE__))
+            'password' => bcrypt(md5(__LINE__)),
         ]);
 
         Fact::factory(10)->create();

@@ -22,13 +22,14 @@ class FactImporter extends Importer
                 ->requiredMapping()
                 ->rules(['required']),
             ImportColumn::make('ended_at')
-                ->rules(['datetime'])
+                ->rules(['datetime']),
         ];
     }
 
     public function resolveRecord(): Fact
     {
         dd($this->data);
+
         return Fact::firstOrNew([
             'id' => $this->data['id'],
         ]);
@@ -36,10 +37,10 @@ class FactImporter extends Importer
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Your fact import has completed and ' . Number::format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
+        $body = 'Your fact import has completed and '.Number::format($import->successful_rows).' '.str('row')->plural($import->successful_rows).' imported.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to import.';
+            $body .= ' '.Number::format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to import.';
         }
 
         return $body;

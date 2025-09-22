@@ -16,21 +16,24 @@ class ListFactController extends Controller
     public function __invoke(Request $request)
     {
         $records = $this->getRecords();
+
         return view('fact.list', [
             'records' => $records,
         ]);
     }
 
-    protected function getRecords() : Collection {
+    protected function getRecords(): Collection
+    {
         $cacheKey = __METHOD__;
 
-        return Cache::remember($cacheKey,  Carbon::now()->endOfYear(), function() {
+        return Cache::remember($cacheKey, Carbon::now()->endOfYear(), function () {
 
             $records = Fact::take(1000)
                 ->with(['tags'])
                 ->whereNotNull('published_at')
                 ->orderBy('ended_at', 'desc')
                 ->get();
+
             return $records;
         });
     }

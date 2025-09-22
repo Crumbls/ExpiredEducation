@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Tags\HasTags;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Tags\HasTags;
 
 class Fact extends Model implements HasMedia
 {
     use HasFactory,
         HasTags, InteractsWithMedia;
+
     protected $fillable = [
         'title',
         'content_old',
@@ -32,7 +33,7 @@ class Fact extends Model implements HasMedia
         'started_at' => 'datetime',
         'ended_at' => 'datetime',
         'version' => 'integer',
-        'attribution' => 'json'
+        'attribution' => 'json',
     ];
 
     public function parent(): BelongsTo
@@ -77,7 +78,6 @@ class Fact extends Model implements HasMedia
                     ->groupBy('parent_id');
             });
     }
-
 
     public function scopePublished($query)
     {
